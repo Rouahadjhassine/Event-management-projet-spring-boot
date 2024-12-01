@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de Recherche de Lieux</title>
+</head>
+<body>
+<h1>Filtrer les Lieux pour votre Événement</h1>
+<form action="/formulaire" method="post">
+    <label for="numberOfPeople">Nombre de personnes:</label>
+    <input type="number" id="numberOfPeople" name="numberOfPeople" required>
+    <br>
+
+    <label for="isOpenSpacePreferred">Préférer un espace ouvert?</label>
+    <input type="checkbox" id="isOpenSpacePreferred" name="isOpenSpacePreferred">
+    <br>
+
+    <label for="budget">Budget:</label>
+    <input type="number" id="budget" name="budget" required>
+    <br>
+
+    <label for="locationPreference">Préférence de type de lieu:</label>
+    <input type="text" id="locationPreference" name="locationPreference">
+    <br>
+
+    <button type="submit">Rechercher</button>
+</form>
+
+<div>
+    <h2>Résultats</h2>
+    <ul>
+        <th:block th:each="lieu : ${filteredLieux}">
+            <li th:text="${lieu.name}"></li>
+        </th:block>
+    </ul>
+</div>
+</body>
+</html>

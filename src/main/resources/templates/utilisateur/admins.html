@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <title>Dashboard Admin</title>
+  <style>
+    .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background-color: #343a40;
+      color: white;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      display: block;
+      cursor: pointer;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    .section {
+      display: none;
+    }
+    .stats-block {
+      display: inline-block;
+      width: 30%;
+      margin: 10px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <h4 class="text-center">Admin Dashboard</h4>
+  <a onclick="showSection('dashboard')">Tableau de bord</a>
+  <a onclick="showSection('users')">Gérer les Participants</a>
+  <a onclick="showSection('providers')">Gérer les prestataires</a>
+  <a onclick="showSection('admins')">Gérer les administrateurs</a>
+</div>
+
+<div class="content">
+  <!-- Tableau de bord -->
+  <div id="dashboard" class="section">
+    <h3>Tableau de bord</h3>
+    <div class="stats-block">
+      <h5>Nombre d'administrateurs</h5>
+      <p th:text="${adminCount}">0</p>
+    </div>
+    <div class="stats-block">
+      <h5>Nombre de prestataires</h5>
+      <p th:text="${providerCount}">0</p>
+    </div>
+    <div class="stats-block">
+      <h5>Nombre des Participants</h5>
+      <p th:text="${userCount}">0</p>
+    </div>
+  </div>
+
+  <!-- Gestion des Participants -->
+  <div id="users" class="section">
+    <h3>Gérer les Participants</h3>
+    <button class="btn btn-success mb-3" onclick="openModal('userModal')">Ajouter un Participant</button>
+    <table class="table mt-4">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Liste des Participants -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Gestion des prestataires -->
+  <div id="providers" class="section">
+    <h3>Gérer les Prestataires</h3>
+    <button class="btn btn-success mb-3" onclick="openModal('providerModal')">Ajouter un prestataire</button>
+    <table class="table mt-4">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Liste des prestataires -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Gestion des administrateurs -->
+  <div id="admins" class="section">
+    <h3>Gérer les Administrateurs</h3>
+    <button class="btn btn-success mb-3" onclick="openModal('adminModal')">Ajouter un administrateur</button>
+    <table class="table mt-4">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Liste des administrateurs -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Modal pour Ajouter un Utilisateur -->
+<div class="modal" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">Ajouter un Utilisateur</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulaire -->
+        <form action="/addAdmin" method="post">
+          <!-- Champ pour le nom -->
+          <div class="form-group">
+            <label for="userName">Nom</label>
+            <input type="text" class="form-control" id="userName" name="userName" placeholder="Entrez le nom" required>
+          </div>
+
+          <!-- Champ pour l'email -->
+          <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="Entrez l'email" required>
+          </div>
+
+          <!-- Bouton de soumission -->
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal pour Ajouter un Prestataire -->
+<div class="modal" id="providerModal" tabindex="-1" role="dialog" aria-labelledby="providerModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="providerModalLabel">Ajouter un Prestataire</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/addProvider" method="post">
+          <div class="form-group">
+            <label for="providerName">Nom</label>
+            <input type="text" class="form-control" id="providerName" name="providerName" required>
+          </div>
+          <div class="form-group">
+            <label for="providerEmail">Email</label>
+            <input type="email" class="form-control" id="providerEmail" name="providerEmail" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal pour Ajouter un Administrateur -->
+<div class="modal" id="adminModal" tabindex="-1" role="dialog" aria-labelledby="adminModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="adminModalLabel">Ajouter un Administrateur</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/addAdmin" method="post">
+
+          <div class="form-group">
+            <label for="adminEmail">Email</label>
+            <input type="email" class="form-control" id="adminEmail" name="adminEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="adminEmail">Mot de Passe</label>
+            <input type="password" class="form-control" id="adminpassword" name="adminpassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fonction pour afficher une section et masquer les autres
+  function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+      section.style.display = 'none';
+    });
+    document.getElementById(sectionId).style.display = 'block';
+  }
+
+  // Fonction pour ouvrir un modal
+  function openModal(modalId) {
+    $('#' + modalId).modal('show');
+  }
+
+  // Afficher le tableau de bord par défaut
+  showSection('dashboard');
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+</html>
