@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Prestataires</title>
+</head>
+<style>
+
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+    body {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        line-height: 1.42em;
+        color:#A7A1AE;
+        background-color:#1F2739;
+    }
+
+    h1 {
+        font-size:3em;
+        font-weight: 300;
+        line-height:1em;
+        text-align: center;
+        color: #4DC3FA;
+    }
+
+    h2 {
+        font-size:1em;
+        font-weight: 300;
+        text-align: center;
+        display: block;
+        line-height:1em;
+        padding-bottom: 2em;
+        color: #FB667A;
+    }
+
+    h2 a {
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #FB667A;
+        text-decoration: none;
+    }
+
+    .blue { color: #185875; }
+    .yellow { color: #4b49ac; }
+
+    .container th h1 {
+        font-weight: bold;
+        font-size: 1em;
+        text-align: left;
+        color: #185875;
+    }
+
+    .container td {
+        font-weight: normal;
+        font-size: 1em;
+        -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+        -moz-box-shadow: 0 2px 2px -2px #0E1119;
+        box-shadow: 0 2px 2px -2px #0E1119;
+        width: 100%;
+    }
+
+    .container {
+        text-align: left;
+        overflow: hidden;
+        width: 100%;
+        margin: 0 auto;
+        display: table;
+        padding: 0 0 0 0;
+    }
+
+    .container td, .container th {
+        padding-bottom: 2%;
+        padding-top: 2%;
+        padding-left:2%;
+        width: 100%;
+    }
+
+    /* Background-color of the odd rows */
+    .container tr:nth-child(odd) {
+        background-color: #323C50;
+    }
+
+    /* Background-color of the even rows */
+    .container tr:nth-child(even) {
+        background-color: #2C3446;
+    }
+
+    .container th {
+        background-color: #1F2739;
+    }
+
+    .container td:first-child { color: #FB667A; }
+
+    .container tr:hover {
+        background-color: #464A52;
+        -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+        -moz-box-shadow: 0 6px 6px -6px #0E1119;
+        box-shadow: 0 6px 6px -6px #0E1119;
+    }
+
+    .container td:hover {
+        background-color: #4b49ac;
+        color: white;
+        font-weight: bold;
+
+        box-shadow: rgba(255, 255, 255, 0.2) -1px 1px, rgba(255, 255, 255, 0.2) -2px 2px, rgba(255, 255, 255, 0.2) -3px 3px, rgba(255, 255, 255, 0.2) -4px 4px, rgba(255, 255, 255, 0.2) -5px 5px, rgba(255, 255, 255, 0.2) -6px 6px;
+        transform: translate3d(6px, -6px, 0);
+
+        transition-delay: 0s;
+        transition-duration: 0.4s;
+        transition-property: all;
+        transition-timing-function: line;
+    }
+
+    @media (max-width: 800px) {
+        .container td:nth-child(4),
+        .container th:nth-child(4) { display: none; }
+    }
+    .homebutton{
+        border: 1px solid white;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        width: fit-content;
+        padding: 0 10px;
+
+    }
+    .homeContainer{
+
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    /* From Uiverse.io by adamgiebl */
+    .cssbuttons-io-button {
+        border: 1px solid white;
+        background: #4b49ac;
+        color: white;
+        font-family: inherit;
+        padding: 0.35em;
+        padding-left: 1.2em;
+        font-size: 17px;
+        font-weight: 500;
+        border-radius: 0.9em;
+
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        box-shadow: inset 0 0 1.6em -0.6em #4b49ac;
+        overflow: hidden;
+        position: relative;
+        height: 2.8em;
+        padding-right: 3.3em;
+        cursor: pointer;
+    }
+
+    .cssbuttons-io-button .icon {
+        background: white;
+        margin-left: 1em;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.2em;
+        width: 2.2em;
+        border-radius: 0.7em;
+        box-shadow: 0.1em 0.1em 0.6em 0.2em #4b49ac;
+        right: 0.3em;
+        transition: all 0.3s;
+    }
+
+    .cssbuttons-io-button:hover .icon {
+        width: calc(100% - 0.6em);
+    }
+
+    .cssbuttons-io-button .icon svg {
+        width: 1.1em;
+        transition: transform 0.3s;
+        color: #4b49ac;
+    }
+
+    .cssbuttons-io-button:hover .icon svg {
+        transform: translateX(0.1em);
+    }
+
+    .cssbuttons-io-button:active .icon {
+        transform: scale(0.95);
+    }
+
+    .cssbuttons-io-button-delete {
+        border: 1px solid white;
+        background: red;
+        color: white;
+        font-family: inherit;
+        padding: 0.35em;
+        padding-left: 1.2em;
+        font-size: 17px;
+        font-weight: 500;
+        border-radius: 0.9em;
+
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        box-shadow: inset 0 0 1.6em -0.6em red;
+        overflow: hidden;
+        position: relative;
+        height: 2.8em;
+        padding-right: 3.3em;
+        cursor: pointer;
+    }
+
+    .cssbuttons-io-button-delete .icon {
+        background: white;
+        margin-left: 1em;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.2em;
+        width: 2.2em;
+        border-radius: 0.7em;
+        box-shadow: 0.1em 0.1em 0.6em 0.2em red;
+        right: 0.3em;
+        transition: all 0.3s;
+    }
+
+    .cssbuttons-io-button-delete:hover .icon {
+        width: calc(100% - 0.6em);
+    }
+
+    .cssbuttons-io-button-delete .icon svg {
+        width: 1.1em;
+        transition: transform 0.3s;
+        color: red;
+    }
+
+    .cssbuttons-io-button-delete:hover .icon svg {
+        transform: translateX(0.1em);
+    }
+
+    .cssbuttons-io-button-delete:active .icon {
+        transform: scale(0.95);
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+    }
+
+    .modal-content {
+        background-color: #1F2739;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%; /* Could be more or less, depending on screen size */
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .modal-content .title{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .modal-content form{
+        display: flex;
+        flex-direction: column;
+        gap:20px;
+    }
+    .modal-content form .formElement{
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: space-between;
+        gap: 5px;
+
+    }
+    .modal-content form label{
+        font-weight: bold;
+    }
+    .close {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 3px;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #f00;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    label, input {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* From Uiverse.io by cohencoo */
+    .input {
+        border-radius: 10px;
+        outline: 2px solid white;
+        border: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        background-color: #e2e2e2;
+        outline-offset: 3px;
+        transition: 0.25s;
+        padding: 10px 1rem;
+        width: 93%;
+    }
+
+    .input:focus {
+        outline-offset: 5px;
+        background-color: #fff
+    }
+
+    /* From Uiverse.io by Cornerstone-04 */
+    .button2{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .box {
+        width: 100%;
+        height: auto;
+        transition: .5s linear;
+        position: relative;
+        display: block;
+        overflow: hidden;
+        padding: 15px;
+        text-align: center;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: 900;
+        border-radius: 10px;
+    }
+
+    .box:before {
+        position: absolute;
+        content: '';
+        left: 0;
+        bottom: 0;
+        height: 4px;
+        width: 100%;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        box-sizing: border-box;
+        transform: translateX(100%);
+        border-radius: 10px;
+    }
+
+    .box:after {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        border-top: 4px solid transparent;
+        border-right: 4px solid transparent;
+        box-sizing: border-box;
+        transform: translateX(-100%);
+        border-radius: 10px;
+    }
+
+    .box:hover {
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
+    }
+
+    .box:hover:before {
+        border-color: white;
+        height: 100%;
+        transform: translateX(0);
+        transition: .3s transform linear, .3s height linear .3s;
+    }
+
+    .box:hover:after {
+        border-color: white;
+        height: 100%;
+        transform: translateX(0);
+        transition: .3s transform linear, .3s height linear .5s;
+    }
+
+    button {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: transparent;
+    }
+    .actionsTd{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+
+</style>
+<body>
+
+<div class="homeContainer">
+    <div class="homebutton">
+        <a href="/admin/dashboard">
+            <svg width="40px" height="40px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <style>.cls-1{fill:none;stroke:white;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}</style>
+                </defs>
+
+                <g data-name="Layer 2" id="Layer_2">
+
+                    <g data-name="E421, Back, buttons, multimedia, play, stop" id="E421_Back_buttons_multimedia_play_stop">
+
+                        <circle class="cls-1" cx="256" cy="256" r="246"/>
+
+                        <line class="cls-1" x1="352.26" x2="170.43" y1="256" y2="256"/>
+
+                        <polyline class="cls-1" points="223.91 202.52 170.44 256 223.91 309.48"/>
+
+                    </g>
+
+                </g>
+
+            </svg>
+
+        </a>
+
+        <h4 >Return</h4>
+    </div>
+</div>
+
+<h1 style="font-weight: bold;color: white">Liste des Prestataires</h1>
+
+<div th:if="${errorMessage}">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<table class="container">
+    <thead>
+    <tr>
+        <th align="left">ID</th>
+        <th>Email</th>
+        <th>Nom</th>
+        <th>Rôle</th>
+        <th>localAddress</th>
+        <th>localName</th>
+        <th>phoneNumber</th>
+        <th>Image</th>
+        <th align="center">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="prestataire : ${prestataires}">
+        <td th:text="${prestataire.id}" align="left"></td>
+        <td th:text="${prestataire.email}"></td>
+        <td th:text="${prestataire.name}"></td>
+        <td th:text="${prestataire.role}"></td>
+        <td th:text="${prestataire.localAddress}"></td>
+        <td th:text="${prestataire.localName}"></td>
+        <td th:text="${prestataire.phoneNumber}"></td>
+        <td th:text="${prestataire.verificationImage}"></td>
+        <td class="actionsTd">
+            <!-- Ajouter des actions comme modifier ou supprimer -->
+            <button class="cssbuttons-io-button" th:onclick="openModal([[${prestataire.id}]],'[[${prestataire.email}]]')">
+                Modifier
+                <div class="icon">
+                    <svg
+                            height="24"
+                            width="24"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                                d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                fill="currentColor"
+                        ></path>
+                    </svg>
+                </div>
+            </button>
+            <button class="cssbuttons-io-button-delete" th:onclick="openModal([[${prestataire.id}]],'[[${prestataire.email}]]')">
+                Supprimer
+                <div class="icon">
+                    <svg height="24"
+                         width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 12V17" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 12V17" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 7H20" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="title">
+            <h3>Modifier les informations</h3>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+
+
+        <form id="updateForm" method="POST" >
+            <div class="formElement">
+                <label for="prestataireEmail">Email :</label>
+                <input type="email" id="prestataireEmail" name="email" class="input"placeholder="update email" required>
+            </div>
+            <div class="formElement">
+                <label for="prestatairePassword">Mot de passe :</label>
+                <input type="password" id="prestatairePassword"class="input" name="password" placeholder="new password" required>
+            </div>
+
+
+            <button type="submit" class="button2"><span class="box">Mettre à jour</span></button>
+        </form>
+    </div>
+</div>
+
+<script type="application/javascript">
+    // Open the modal and pre-fill data
+    function openModal(prestataireId, email, password) {
+        // Show the modal
+        document.getElementById("myModal").style.display = "block";
+
+
+        // Update form action
+        const form = document.getElementById("updateForm");
+        form.action = `/prestataire/update/${prestataireId}`;
+    }
+
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+
+    // Close the modal
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
