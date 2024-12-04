@@ -1135,84 +1135,85 @@
 
 </section>
 <div class="container">
-    <header>Add Your Space</header>
+    <header>Ajouter Votre Espace</header>
     <form th:action="@{/utilisateur/prestataire/registerespace}" th:object="${espaceEvenement}" method="post">
+        <input type="hidden" th:field="*{prestataire.id}" />
+
         <div class="fields">
-            <input type="hidden" name="prestataireId" th:value="${prestataireId}" />
             <!-- Informations générales -->
             <div class="input-field">
                 <label>Nom complet</label>
-                <input type="text" id="nomComplet" th:field="*{nomComplet}" placeholder="Entrez le nom complet" required />
+                <input type="text" th:field="${espaceEvenement.nomComplet}" placeholder="Entrez le nom complet" required />
             </div>
 
-            <div class="input-field">
-                <label>Adresse complète de l'espace</label>
-                <input type="text"  placeholder="Entrez l'adresse complète" required>
-            </div>
-            <div class="input-field">
-                <label>Disponibilité de l'espace</label>
-                <input type="text"  placeholder="Ex: Lundi - Vendredi, 9h-18h" required>
-            </div>
 
-            <!-- Détails sur l'espace -->
+
             <div class="input-field">
                 <label>Type d'espace</label>
-                <select  required>
+                <select th:field="*{typeEspace}" required>
                     <option value="cafe">Café</option>
                     <option value="restaurant">Restaurant</option>
                     <option value="salle">Salle de fête</option>
                 </select>
             </div>
+
             <div class="input-field">
                 <label>Capacité (nombre de personnes)</label>
-                <input type="number"  placeholder="Capacité" required>
+                <input type="number" th:field="*{capacite}" placeholder="Capacité" required />
             </div>
 
             <!-- Services et coûts -->
             <div class="input-field">
                 <label>Décoration (Prix par personne)</label>
-                <input type="number"  placeholder="Prix décoration" required>
+                <input type="number" th:field="*{prixDecoration}" placeholder="Prix décoration" required />
             </div>
             <div class="input-field">
                 <label>Photographie (Prix par personne)</label>
-                <input type="number"  placeholder="Prix photographie" required>
+                <input type="number" th:field="*{prixPhotographie}" placeholder="Prix photographie" required />
             </div>
             <div class="input-field">
                 <label>Boissons (Prix par personne)</label>
-                <input type="number"  placeholder="Prix boissons" required>
+                <input type="number" th:field="*{prixBoissons}" placeholder="Prix boissons" required />
             </div>
             <div class="input-field">
                 <label>Buffet (Prix par personne)</label>
-                <input type="number"  placeholder="Prix buffet" required>
+                <input type="number" th:field="*{prixBuffet}" placeholder="Prix buffet" required />
             </div>
 
             <!-- Champ pour nombre de personnes et coût total -->
-            <div class="input-field" style="width: 100%;">
+            <div class="input-field">
                 <label>Nombre de personnes</label>
-                <input type="number" id="nombrePersonnes" placeholder="Nombre de personnes" required>
+                <input type="number" id="nombrePersonnes" placeholder="Nombre de personnes" required />
             </div>
-            <div class="input-field" style="width: 100%;">
+            <div class="input-field">
                 <label>Coût total</label>
-                <input type="text" id="coutTotal" placeholder="Coût total" readonly>
+                <input type="text" id="coutTotal" placeholder="Coût total" readonly />
             </div>
         </div>
+
         <button type="submit">Soumettre</button>
     </form>
 </div>
-
 <script>
-    // Calcul du coût total
-    document.getElementById('nombrePersonnes').addEventListener('input', function() {
-        const n = parseInt(this.value) || 0;
-        const prixDecoration = parseFloat(document.querySelector('input[th\\:field="*{prixDecoration}"]').value) || 0;
-        const prixPhotographie = parseFloat(document.querySelector('input[th\\:field="*{prixPhotographie}"]').value) || 0;
-        const prixBoissons = parseFloat(document.querySelector('input[th\\:field="*{prixBoissons}"]').value) || 0;
-        const prixBuffet = parseFloat(document.querySelector('input[th\\:field="*{prixBuffet}"]').value) || 0;
+    function calculerCoutTotal() {
+        const n = parseInt(document.getElementById('nombrePersonnes').value) || 0;
+        const prixDecoration = parseFloat(document.getElementById('prixDecoration').value) || 0;
+        const prixPhotographie = parseFloat(document.getElementById('prixPhotographie').value) || 0;
+        const prixBoissons = parseFloat(document.getElementById('prixBoissons').value) || 0;
+        const prixBuffet = parseFloat(document.getElementById('prixBuffet').value) || 0;
 
         const total = n * (prixDecoration + prixPhotographie + prixBoissons + prixBuffet);
         document.getElementById('coutTotal').value = total.toFixed(2) + " TND";
-    });
+    }
+
+    // Ajouter des écouteurs d'événements pour recalculer à chaque modification
+    document.getElementById('nombrePersonnes').addEventListener('input', calculerCoutTotal);
+    document.getElementById('prixDecoration').addEventListener('input', calculerCoutTotal);
+    document.getElementById('prixPhotographie').addEventListener('input', calculerCoutTotal);
+    document.getElementById('prixBoissons').addEventListener('input', calculerCoutTotal);
+    document.getElementById('prixBuffet').addEventListener('input', calculerCoutTotal);
 </script>
+
 
 <footer>
     <ul>
@@ -1222,13 +1223,11 @@
         <li><a href="#">Evenings & Galas</a></li>
         <li><a href="#">Conferences</a></li>
     </ul>
-
     <ul>
         Our Guest
         <li><a href="#">Customer</a></li>
         <li><a href="#">Venue Owner</a></li>
     </ul>
-
     <ul>
         Our Services
         <li><a href="#">Event Planning</a></li>
@@ -1237,7 +1236,6 @@
         <li><a href="#">Decoration & Setup</a></li>
         <li><a href="#">Audiovisual Equipment</a></li>
     </ul>
-
     <ul>
         About Us
         <li><a href="#">Our Story</a></li>

@@ -12,4 +12,6 @@ public interface EspaceEvenementRepository extends JpaRepository<EspaceEvenement
 
     // Trouver un espace par son nom complet
     Optional<EspaceEvenement> findByNomComplet(String nomComplet);
+
+    List<EspaceEvenement> findByPrestataireId(Long prestataireId);
 }

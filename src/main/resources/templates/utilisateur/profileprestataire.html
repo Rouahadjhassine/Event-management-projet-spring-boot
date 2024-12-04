@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Prestataire</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #FA8072; /* Couleur saumon */
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu li {
+            margin: 20px 0;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            display: block;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .menu a:hover {
+            background-color: #FF6347; /* Couleur saumon plus foncée pour le survol */
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none; /* Toutes les sections sont masquées par défaut */
+        }
+
+        section.active {
+            display: block; /* La section active est visible */
+        }
+
+        h2 {
+            color: #FA8072; /* Titres avec la couleur saumon */
+        }
+
+        form button {
+            margin-top: 15px;
+            background-color: #FA8072; /* Bouton principal */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #FF6347; /* Survol du bouton */
+        }
+        .ui-btn {
+            --btn-default-bg: rgb(41, 41, 41);
+            --btn-padding: 15px 20px;
+            --btn-hover-bg: rgb(51, 51, 51);
+            --btn-transition: .3s;
+            --btn-letter-spacing: .1rem;
+            --btn-animation-duration: 1.2s;
+            --btn-shadow-color: rgba(0, 0, 0, 0.137);
+            --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
+            --hover-btn-color: #FAC921;
+            --default-btn-color: #fff;
+            --font-size: 16px;
+            /* 👆 this field should not be empty */
+            --font-weight: 600;
+            --font-family: Menlo,Roboto Mono,monospace;
+            /* 👆 this field should not be empty */
+        }
+
+        /* button settings 👆 */
+
+        .ui-btn {
+            box-sizing: border-box;
+            padding: var(--btn-padding);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--default-btn-color);
+            font: var(--font-weight) var(--font-size) var(--font-family);
+            background: var(--btn-default-bg);
+            border: none;
+            cursor: pointer;
+            transition: var(--btn-transition);
+            overflow: hidden;
+            box-shadow: var(--btn-shadow);
+        }
+
+        .ui-btn span {
+            letter-spacing: var(--btn-letter-spacing);
+            transition: var(--btn-transition);
+            box-sizing: border-box;
+            position: relative;
+            background: inherit;
+        }
+
+        .ui-btn span::before {
+            box-sizing: border-box;
+            position: absolute;
+            content: "";
+            background: inherit;
+        }
+
+        .ui-btn:hover, .ui-btn:focus {
+            background: var(--btn-hover-bg);
+        }
+
+        .ui-btn:hover span, .ui-btn:focus span {
+            color: var(--hover-btn-color);
+        }
+
+        .ui-btn:hover span::before, .ui-btn:focus span::before {
+            animation: chitchat linear both var(--btn-animation-duration);
+        }
+
+        @keyframes chitchat {
+            0% {
+                content: "#";
+            }
+
+            5% {
+                content: ".";
+            }
+
+            10% {
+                content: "^{";
+            }
+
+            15% {
+                content: "-!";
+            }
+
+            20% {
+                content: "#$_";
+            }
+
+            25% {
+                content: "№:0";
+            }
+
+            30% {
+                content: "#{+.";
+            }
+
+            35% {
+                content: "@}-?";
+            }
+
+            40% {
+                content: "?{4@%";
+            }
+
+            45% {
+                content: "=.,^!";
+            }
+
+            50% {
+                content: "?2@%";
+            }
+
+            55% {
+                content: "\;1}]";
+            }
+
+            60% {
+                content: "?{%:%";
+                right: 0;
+            }
+
+            65% {
+                content: "|{f[4";
+                right: 0;
+            }
+
+            70% {
+                content: "{4%0%";
+                right: 0;
+            }
+
+            75% {
+                content: "'1_0<";
+                right: 0;
+            }
+
+            80% {
+                content: "{0%";
+                right: 0;
+            }
+
+            85% {
+                content: "]>'";
+                right: 0;
+            }
+
+            90% {
+                content: "4";
+                right: 0;
+            }
+
+            95% {
+                content: "2";
+                right: 0;
+            }
+
+            100% {
+                content: "";
+                right: 0;
+            }
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            border-radius: 6px;
+            padding: 30px;
+            background-color: transparent;
+            box-shadow: none;
+        }
+
+        .container header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .input-field {
+            width: calc(50% - 15px);
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .input-field label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-field input,
+        .input-field select {
+            height: 40px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="logo">YoYo InspireSpace</div>
+        <nav class="menu">
+            <ul>
+                <li><a onclick="showSection('ajouter-espace')">Ajouter un Espace</a></li>
+                <li><a onclick="showSection('gerer-compte')">Gérer le Compte</a></li>
+                <li><a onclick="showSection('gerer-photos')">Gérer les Photos</a></li>
+                <li><a href="/deconnexion">Déconnexion</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="content">
+        <header>
+            <h1>Bienvenue, <span th:text="${session.prestataireNom}"></span></h1>
+        </header>
+
+        <section id="ajouter-espace">
+            <h2>Ajouter un Espace</h2>
+            <div class="container">
+                <header>Ajouter Votre Espace</header>
+                <form th:action="@{/utilisateur/prestataire/registerespace}" th:object="${espaceEvenement}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{prestataire.id}" />
+
+                    <div class="fields">
+                        <!-- Informations générales -->
+                        <div class="input-field">
+                            <label>Nom complet</label>
+                            <input type="text" th:field="${espaceEvenement.nomComplet}" placeholder="Entrez le nom complet" required />
+                        </div>
+
+
+
+                        <div class="input-field">
+                            <label>Type d'espace</label>
+                            <select th:field="*{typeEspace}" required>
+                                <option value="cafe">Café</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="salle">Salle de fête</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Capacité (nombre de personnes)</label>
+                            <input type="number" th:field="*{capacite}" placeholder="Capacité" required />
+                        </div>
+
+                        <!-- Services et coûts -->
+                        <div class="input-field">
+                            <label>Décoration (Prix par personne)</label>
+                            <input type="number" th:field="*{prixDecoration}" placeholder="Prix décoration" required />
+                        </div>
+                        <div class="input-field">
+                            <label>Photographie (Prix par personne)</label>
+                            <input type="number" th:field="*{prixPhotographie}" placeholder="Prix photographie" required />
+                        </div>
+                        <div class="input-field">
+                            <label>Boissons (Prix par personne)</label>
+                            <input type="number" th:field="*{prixBoissons}" placeholder="Prix boissons" required />
+                        </div>
+                        <div class="input-field">
+                            <label>Buffet (Prix par personne)</label>
+                            <input type="number" th:field="*{prixBuffet}" placeholder="Prix buffet" required />
+                        </div>
+
+                        <!-- Champ pour nombre de personnes et coût total -->
+                        <div class="input-field">
+                            <label>Nombre de personnes</label>
+                            <input type="number" id="nombrePersonnes" placeholder="Nombre de personnes" required />
+                        </div>
+                        <div class="input-field">
+                            <label>Coût total</label>
+                            <input type="text" id="coutTotal" placeholder="Coût total" readonly />
+                        </div>
+
+                        <div class="input-field">
+                            <label>Télécharger des images</label>
+                            <input type="file" name="imageFiles" multiple required />
+                        </div>
+
+
+                    </div>
+
+                    <button type="submit">Soumettre</button>
+                </form>
+                <div th:if="${images != null and not #lists.isEmpty(images)}" style="margin-top: 20px;">
+                    <h3>Images Téléchargées</h3>
+                    <div th:each="image : ${images}" style="display: inline-block; margin: 10px;">
+                        <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image d'espace" style="width: 150px; height: 150px;">
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(images)}">
+                    <p>Aucune photo disponible pour l'instant.</p>
+                </div>
+            </div>
+            <script>
+                function calculerCoutTotal() {
+                    const n = parseInt(document.getElementById('nombrePersonnes').value) || 0;
+                    const prixDecoration = parseFloat(document.getElementById('prixDecoration').value) || 0;
+                    const prixPhotographie = parseFloat(document.getElementById('prixPhotographie').value) || 0;
+                    const prixBoissons = parseFloat(document.getElementById('prixBoissons').value) || 0;
+                    const prixBuffet = parseFloat(document.getElementById('prixBuffet').value) || 0;
+
+                    const total = n * (prixDecoration + prixPhotographie + prixBoissons + prixBuffet);
+                    document.getElementById('coutTotal').value = total.toFixed(2) + " TND";
+                }
+
+                // Ajouter des écouteurs d'événements pour recalculer à chaque modification
+                document.getElementById('nombrePersonnes').addEventListener('input', calculerCoutTotal);
+                document.getElementById('prixDecoration').addEventListener('input', calculerCoutTotal);
+                document.getElementById('prixPhotographie').addEventListener('input', calculerCoutTotal);
+                document.getElementById('prixBoissons').addEventListener('input', calculerCoutTotal);
+                document.getElementById('prixBuffet').addEventListener('input', calculerCoutTotal);
+            </script>
+
+        </section>
+
+        <section id="gerer-compte">
+                <h2>Gérer les Photos</h2>
+
+            </section>
+
+
+        <section id="gerer-photos">
+            <h2>Gérer les Photos</h2>
+            <div th:if="${images != null and not #lists.isEmpty(images)}">
+                <div th:each="espace : ${espaces}" style="margin-bottom: 20px;">
+                    <h3 th:text="${espace.nom}">Nom de l'Espace</h3>
+
+                    <!-- Afficher les images de chaque espace -->
+                    <div th:each="image : ${espace.images}" style="display: inline-block; margin: 10px;">
+                        <a th:href="@{/espace/details(id=${espace.id})}">Voir les détails</a>
+                        <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image d'espace" style="width: 150px; height: 150px;">
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(images)}">
+                <p>Aucune photo disponible pour l'instant.</p>
+            </div>
+        </section>
+
+
+    </main>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        // Masquer toutes les sections
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Afficher la section sélectionnée
+        document.getElementById(sectionId).classList.add('active');
+    }
+</script>
+
+</body>
+</html>

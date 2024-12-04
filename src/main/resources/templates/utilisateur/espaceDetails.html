@@ -1,0 +1,18 @@
+<!-- templates/utilisateur/detailsespace.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Détails de l'Espace</title>
+</head>
+<body>
+<h1 th:text="${espace.nom}">Nom de l'Espace</h1>
+<p th:text="${espace.description}">Description</p>
+
+<h2>Images de l'Espace :</h2>
+<div th:each="image : ${images}">
+    <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image de l'espace" style="width: 200px; height: 150px;"/>
+</div>
+
+<a href="/utilisateur/profileprestataire">Retour au profil</a>
+</body>
+</html>

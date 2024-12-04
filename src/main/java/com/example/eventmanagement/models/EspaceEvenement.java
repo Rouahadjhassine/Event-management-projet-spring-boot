@@ -2,6 +2,11 @@ package com.example.eventmanagement.models;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.eventmanagement.models.Image;
+
+
 
 @Entity
 public class EspaceEvenement {
@@ -18,6 +23,15 @@ public class EspaceEvenement {
     // Détails sur l'espace
     private String typeEspace;
     private Integer capacite;
+
+    @OneToMany(mappedBy = "espaceEvenement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
+
+
+    public List<Image> getImages() { return images; }  // Correction ici
+    public void setImages(List<Image> images) { this.images = images; }  // Correction ici
+
     @ManyToOne
     @JoinColumn(name = "prestataire_id", nullable = false)
     private Prestataire prestataire;
@@ -128,6 +142,7 @@ public class EspaceEvenement {
     public void setCoutTotal(BigDecimal coutTotal) {
         this.coutTotal = coutTotal;
     }
+
     public Prestataire getPrestataire() {
         return prestataire;
     }
@@ -136,4 +151,3 @@ public class EspaceEvenement {
         this.prestataire = prestataire;
     }
 }
-

@@ -57,8 +57,8 @@ public class HomeController {
 
     @GetMapping("/Login")
     public String login() {
-    return "utilisateur/loginclient"; // Page d'accueil après inscription
-}
+        return "utilisateur/loginclient"; // Page d'accueil après inscription
+    }
 
     @PostMapping("/Login")
     public String login(@RequestParam("email") String email,
@@ -72,8 +72,11 @@ public class HomeController {
             Prestataire prestataire = prestataireOpt.get();
             if (prestataire.getPassword().equals(password)) {
                 session.setAttribute("prestataireId", prestataire.getId());
+                session.setAttribute("prestataireNom", prestataire.getName());
+
+                // model.addAttribute("espaceEvenement", new EspaceEvenement());
                 // Redirection vers la page 'homeprestataire' si le prestataire est authentifié
-                return "redirect:/utilisateur/homeprestataire";
+                return "redirect:/utilisateur/prestataire/registerespace";
             } else {
                 model.addAttribute("error", "Mot de passe incorrect !");
                 return "utilisateur/loginclient";
@@ -123,7 +126,10 @@ public class HomeController {
         return "redirect:/utilisateur/home"; // Redirection après l'enregistrement
     }
 
+    @GetMapping("utilisateur/profileprestataire")
+    public String profile() {
+        return "utilisateur/profileprestataire";
+    }
 
 
 }
-
