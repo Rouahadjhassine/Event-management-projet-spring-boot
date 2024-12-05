@@ -155,5 +155,39 @@ public class EspaceController {
 
         return "utilisateur/profileprestataire"; // Nom de la vue Thymeleaf ou JSP à créer
     }
+    @PostMapping("/utilisateur/prestataire/update")
+    public String updatePrestataire(@ModelAttribute Prestataire prestataire, HttpSession session, Model model) {
+        Long prestataireId = (Long) session.getAttribute("prestataireId");
+
+        if (prestataireId == null) {
+            model.addAttribute("error", "Veuillez vous connecter pour modifier vos informations.");
+            return "utilisateur/loginclient";
+        }
+
+        Optional<Prestataire> existingPrestataireOpt = prestataireRepository.findById(prestataireId);
+        if (existingPrestataireOpt.isEmpty()) {
+            model.addAttribute("error", "Prestataire non trouvé.");
+            return "utilisateur/profileprestataire";
+        }
+
+        Prestataire existingPrestataire = existingPrestataireOpt.get();
+
+        // Mise à jour des champs du prestataire
+        existingPrestataire.setName(prestataire.getName());
+        existingPrestataire.setLocalName(prestataire.getLocalName());
+        existingPrestataire.setEmail(prestataire.getEmail());
+        existingPrestataire.setLocalAddress(prestataire.getLocalAddress());
+        existingPrestataire.setPhoneNumber(prestataire.getPhoneNumber());
+
+        if (prestataire.getPassword() != null && !prestataire.getPassword().isEmpty()) {
+            existingPrestataire.setPassword(prestataire.getPassword());
+        }
+
+        prestataireRepository.save(existingPrestataire);
+
+        model.addAttribute("success", "Vos informations ont été mises à jour avec succès.");
+        return "redirect:/utilisateur/profileprestataire";
+    }
+
 
 }

@@ -545,50 +545,51 @@
         </section>
 
         <section id="gerer-compte">
-            <form class="form">
+            <form method="post" action="/utilisateur/prestataire/update" class="form">
                 <p class="title">Modify your account</p>
                 <p class="message">Modify your information</p>
 
                 <div class="flex">
                     <label>
-                        <input required="" placeholder="" type="text" class="input" name="name">
+                        <input required type="text" class="input" name="name" value="${prestataire.name}">
                         <span>Name</span>
                     </label>
                     <label>
-                        <input required="" placeholder="" type="text" class="input" name="local_name">
+                        <input required type="text" class="input" name="localName" value="${prestataire.localName}">
                         <span>Local Name</span>
                     </label>
                 </div>
 
                 <div class="flex">
                     <label>
-                        <input required="" placeholder="" type="email" class="input" name="email">
+                        <input required type="email" class="input" name="email" value="${prestataire.email}">
                         <span>Email</span>
                     </label>
                     <label>
-                        <input required="" placeholder="" type="text" class="input" name="local_address">
+                        <input type="text" class="input" name="localAddress" value="${prestataire.localAddress}">
                         <span>Local Address</span>
                     </label>
                 </div>
 
                 <div class="flex">
                     <label>
-                        <input required="" placeholder="" type="tel" class="input" name="phone_number">
+                        <input required type="tel" class="input" name="phoneNumber" value="${prestataire.phoneNumber}">
                         <span>Phone Number</span>
                     </label>
                     <label>
-                        <input required="" placeholder="" type="password" class="input" name="password">
-                        <span>Password</span>
+                        <input type="password" class="input" name="password">
+                        <span>New Password</span>
                     </label>
                 </div>
 
                 <label>
-                    <input required="" placeholder="" type="password" class="input" name="confirm_password">
-                    <span>Confirm Password</span>
+                    <input type="password" class="input" name="confirmPassword">
+                    <span>Confirm New Password</span>
                 </label>
 
                 <button class="submit">Submit</button>
             </form>
+
 
 
         </section>
