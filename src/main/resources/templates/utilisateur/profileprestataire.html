@@ -595,23 +595,16 @@
         </section>
 
 
+        <!-- Section Gérer les Photos -->
         <section id="gerer-photos">
             <h2>Gérer les Photos</h2>
-            <div th:if="${images != null and not #lists.isEmpty(images)}">
-                <div th:each="espace : ${espaces}" style="margin-bottom: 20px;">
-                    <h3 th:text="${espace.nom}">Nom de l'Espace</h3>
-
-                    <!-- Afficher les images de chaque espace -->
-                    <div th:each="image : ${espace.images}" style="display: inline-block; margin: 10px;">
-                        <a th:href="@{/espace/details(id=${espace.id})}">Voir les détails</a>
-                        <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image d'espace" style="width: 150px; height: 150px;">
-                    </div>
-                </div>
-            </div>
-            <div th:if="${#lists.isEmpty(images)}">
-                <p>Aucune photo disponible pour l'instant.</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="/utilisateur/prestataire/gererphotos">Accéder à la gestion des photos</a>
             </div>
         </section>
+
+
+
 
 
     </main>

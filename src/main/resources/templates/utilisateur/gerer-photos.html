@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gérer les Photos</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<section id="gerer-photos">
+    <h1>Gérer vos Photos</h1>
+    <div class="image-gallery">
+        <div th:each="image : ${images}">
+            <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image">
+            <form th:action="@{/utilisateur/prestataire/deletephoto}" method="post" style="margin-top: 10px;">
+                <input type="hidden" th:value="${image.id}" name="imageId"/>
+                <button type="submit">Supprimer</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

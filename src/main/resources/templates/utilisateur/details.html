@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'espace</title>
+</head>
+<body>
+<section id="details">
+    <h2>Détails de l'espace</h2>
+    <h3>Nom : <span th:text="${espace.nomComplet}">Nom de l'espace</span></h3>
+
+    <div>
+        <h3>Images :</h3>
+        <div th:each="image : ${images}" style="display: inline-block; margin: 10px;">
+            <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image d'espace"
+                 style="width: 150px; height: 150px;">
+        </div>
+    </div>
+    <button onclick="history.back();">Retour</button>
+</section>
+</body>
+</html>

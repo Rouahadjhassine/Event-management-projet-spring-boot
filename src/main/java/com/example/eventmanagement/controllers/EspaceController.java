@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,24 +95,59 @@ public class EspaceController {
             return "utilisateur/profileprestataire";
         }
 
-        return "redirect:/utilisateur/profileprestataire";
+        return "redirect:/espace/confirmation-et-details?id=" + espaceEvenement.getId();
+
     }
+    @GetMapping("/espace/confirmation-et-details")
+    public String showConfirmationAndDetails(@RequestParam("id") Long espaceId, Model model) {
+        Optional<EspaceEvenement> espaceOpt = espaceEvenementRepository.findById(espaceId);
+        if (espaceOpt.isEmpty()) {
+            model.addAttribute("error", "Espace non trouvé.");
+            return "redirect:/utilisateur/profileprestataire";
+        }
+
+        EspaceEvenement espace = espaceOpt.get();
+        List<Image> images = imageRepository.findByEspaceEvenement(espace);
+
+        model.addAttribute("espace", espace); // Informations de l'espace
+        model.addAttribute("images", images); // Images associées
+        model.addAttribute("confirmationMessage", "Votre espace a été enregistré avec succès."); // Message de confirmation
+
+        return "utilisateur/confirmation-et-details"; // Vue unifiée
+    }
+
+    @GetMapping("/espace/confirmation")
+    public String confirmationPage(@RequestParam("id") Long espaceId, Model model) {
+        Optional<EspaceEvenement> espaceOpt = espaceEvenementRepository.findById(espaceId);
+        if (espaceOpt.isEmpty()) {
+            model.addAttribute("error", "Espace non trouvé.");
+            return "redirect:/utilisateur/profileprestataire";
+        }
+
+        model.addAttribute("espaceId", espaceId);
+        return "utilisateur/confirmation";
+    }
+
 
     // Affichage des photos associées aux espaces d'un prestataire
     @GetMapping("/utilisateur/prestataire/gererphotos")
-    public String showPhotos(Model model, HttpSession session) {
+    public String gererPhotos(Model model, HttpSession session) {
         Long prestataireId = (Long) session.getAttribute("prestataireId");
-
-        if (prestataireId != null) {
-            List<EspaceEvenement> espaces = espaceEvenementRepository.findByPrestataireId(prestataireId);
-            List<Image> images = imageRepository.findByEspaceEvenementIn(espaces); // Méthode personnalisée
-            model.addAttribute("images", images);
-        } else {
-            model.addAttribute("error", "Veuillez vous connecter pour accéder à cette page.");
+        if (prestataireId == null) {
+            model.addAttribute("error", "Veuillez vous connecter pour gérer vos photos.");
+            return "utilisateur/loginclient";
         }
 
-        return "utilisateur/profileprestataire";
+        // Récupération des espaces liés au prestataire
+        List<EspaceEvenement> espaces = espaceEvenementRepository.findByPrestataireId(prestataireId);
+
+        // Récupération des images associées à ces espaces
+        List<Image> images = imageRepository.findByEspaceEvenementIn(espaces);
+
+        model.addAttribute("images", images); // Ajouter les images pour la vue
+        return "utilisateur/gerer-photos"; // Page dédiée
     }
+
 
 
     // Téléchargement d'images pour un espace existant
@@ -153,7 +189,7 @@ public class EspaceController {
         model.addAttribute("espace", espace);
         model.addAttribute("images", images); // Passe les images à la vue
 
-        return "utilisateur/profileprestataire"; // Nom de la vue Thymeleaf ou JSP à créer
+        return "utilisateur/details";  // Nom de la vue Thymeleaf ou JSP à créer
     }
     @PostMapping("/utilisateur/prestataire/update")
     public String updatePrestataire(@ModelAttribute Prestataire prestataire, HttpSession session, Model model) {
