@@ -14,4 +14,6 @@ public interface EspaceEvenementRepository extends JpaRepository<EspaceEvenement
     Optional<EspaceEvenement> findByNomComplet(String nomComplet);
 
     List<EspaceEvenement> findByPrestataireId(Long prestataireId);
+
+    List<EspaceEvenement> findByCapaciteAndTypeEspaceAndDisponibilite(Integer capacite, String typeEspace, String disponible);
 }

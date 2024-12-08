@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de la Recherche</title>
+</head>
+<body>
+<h1>Résultats de Recherche</h1>
+
+<div>
+    <ul>
+        <!-- Afficher les espaces trouvés -->
+        <li th:each="space : ${spaces}">
+            <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
+            <h3 th:text="${space.nom}">Nom de l'espace</h3>
+            <p th:text="${space.capacite}">Capacité</p>
+            <p th:text="${space.typeEspace}">Type d'espace</p>
+            <a th:href="@{/utilisateur/space-details/{id}(id=${space.id})}">Voir les détails</a>
+        </li>
+    </ul>
+</div>
+
+<a href="/utilisateur/profile">Retour au profil</a>
+</body>
+</html>

@@ -2,6 +2,8 @@ package com.example.eventmanagement.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Participant {
 
@@ -72,4 +74,16 @@ public class Participant {
     public void setNumTelephone(String numTelephone) {
         this.numTelephone = numTelephone;
     }
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FormulaireDemande> demandes;
+
+    // Getter et Setter pour demandes
+    public List<FormulaireDemande> getDemandes() {
+        return demandes;
+    }
+
+    public void setDemandes(List<FormulaireDemande> demandes) {
+        this.demandes = demandes;
+    }
+
 }

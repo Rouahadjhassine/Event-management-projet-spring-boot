@@ -1,8 +1,11 @@
 package com.example.eventmanagement.controllers;
 
 import com.example.eventmanagement.models.EspaceEvenement;
+import com.example.eventmanagement.models.FormulaireDemande;
 import com.example.eventmanagement.models.Participant;
 import com.example.eventmanagement.models.Prestataire;
+import com.example.eventmanagement.repository.EspaceEvenementRepository;
+import com.example.eventmanagement.repository.FormulaireDemandeRepository;
 import com.example.eventmanagement.repository.ParticipantRepository;
 import com.example.eventmanagement.repository.PrestataireRepository;
 import com.example.eventmanagement.services.ParticipantService;
@@ -11,23 +14,29 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class HomeController {
 
     @Autowired
+    private EspaceEvenementRepository espaceEvenementRepository;
+
+    @Autowired
+    private ParticipantRepository participantRepository;
+    @Autowired
+    private FormulaireDemandeRepository formulaireDemandeRepository;
+
+    @Autowired
     private ParticipantService participantService;
     @Autowired
     private PrestataireService prestataireService;
-    @Autowired
-    private ParticipantRepository participantRepository;
+
     @Autowired
     private PrestataireRepository prestataireRepository;
 
@@ -90,7 +99,7 @@ public class HomeController {
             Participant participant = participantOpt.get();
             if (participant.getPassword().equals(password)) {
                 // Redirection vers la page 'home' pour un participant
-                return "redirect:/utilisateur/home";
+                return "redirect:/profile";
             } else {
                 model.addAttribute("error", "Mot de passe incorrect !");
                 return "utilisateur/loginclient";
@@ -129,6 +138,77 @@ public class HomeController {
     @GetMapping("utilisateur/profileprestataire")
     public String profile() {
         return "utilisateur/profileprestataire";
+    }
+    @GetMapping("/profile")
+    public String showProfile(Model model) {
+        // Remplacez par l'authentification réelle
+        Participant participant = participantRepository.findById(1L).orElse(null);
+        model.addAttribute("participant", participant);
+        return "utilisateur/profile";
+    }
+
+    // Formulaire de recherche
+    @GetMapping("/search-form")
+    public String showSearchForm(Model model) {
+        model.addAttribute("espace", new EspaceEvenement());
+        return "utilisateur/search-form";
+    }
+
+    // Résultats de recherche
+    @PostMapping("/search-results")
+    public String searchSpaces(@ModelAttribute EspaceEvenement criteria, Model model) {
+        // Simulation : Remplacez avec l'authentification réelle
+        Participant participant = participantRepository.findById(1L).orElse(null);
+
+        // Enregistrer la demande dans la base
+        FormulaireDemande demande = new FormulaireDemande();
+        demande.setCapacite(criteria.getCapacite());
+        demande.setTypeEspace(criteria.getTypeEspace());
+        demande.setDateDemande(LocalDate.now());
+        demande.setParticipant(participant);
+        demande.setStatus("En cours");
+
+        formulaireDemandeRepository.save(demande);
+
+        // Recherche des espaces correspondants
+        List<EspaceEvenement> spaces = espaceEvenementRepository.findByCapaciteAndTypeEspaceAndDisponibilite(
+                criteria.getCapacite(),
+                criteria.getTypeEspace(),
+                "Disponible"
+        );
+
+        model.addAttribute("spaces", spaces);
+        return "utilisateur/search-results";
+    }
+
+    // Détails d'un espace
+    @GetMapping("/space-details/{id}")
+    public String showSpaceDetails(@PathVariable Long id, Model model) {
+        EspaceEvenement espace = espaceEvenementRepository.findById(id).orElse(null);
+        model.addAttribute("space", espace);
+        return "utilisateur/space-details";
+    }
+
+    // Confirmation de la demande
+    @PostMapping("/confirm-request/{id}")
+    public String confirmRequest(@PathVariable Long id) {
+        // Simulation : Remplacez avec l'authentification réelle
+        Participant participant = participantRepository.findById(1L).orElse(null);
+
+        // Récupérer la demande en cours pour ce participant
+        FormulaireDemande demande = formulaireDemandeRepository.findByParticipantId(participant.getId())
+                .stream()
+                .filter(d -> d.getStatus().equals("En cours"))
+                .findFirst()
+                .orElse(null);
+
+        if (demande != null) {
+            demande.setStatus("Confirmée");
+            formulaireDemandeRepository.save(demande);
+        }
+
+        System.out.println("Demande confirmée pour l'espace ID: " + id);
+        return "redirect:/utilisateur/profile";
     }
 
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'Espace</title>
+</head>
+<body>
+<h1>Détails de l'Espace</h1>
+
+<div>
+    <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
+    <h2 th:text="${space.nom}">Nom de l'espace</h2>
+    <p th:text="${space.capacite}">Capacité</p>
+    <p th:text="${space.typeEspace}">Type d'espace</p>
+    <p th:text="${space.description}">Description de l'espace</p>
+</div>
+
+<form action="/utilisateur/confirm-request/{id}" method="post">
+    <button type="submit">Confirmer la demande</button>
+</form>
+
+<a href="/utilisateur/search-form">Retour à la recherche</a>
+</body>
+</html>
