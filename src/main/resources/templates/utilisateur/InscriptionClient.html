@@ -131,7 +131,6 @@
     <!-- Conteneur des boutons à droite avec marge gauche pour les déplacer -->
     <div class="buttons">
         <button class="btn">Login</button>
-        <button class="btn">Register</button>
     </div>
 </header>
 <form th:action="@{/inscription}" th:object="${participant}" method="post">
@@ -139,12 +138,12 @@
     <div class="close-btn">&times;</div>
 
     <div class="box" onclick="window.location.href = '/utilisateur/participant/register'">
-        <h2>Inscrivez-vous En tant que Participant</h2>
+        <h2>Register as a Participant</h2>
         <div class="arrow">→</div>
     </div>
 
     <div class="box" onclick="window.location.href = '/utilisateur/prestataire/register'">
-        <h2>Inscrivez-vous En tant que Prestataire</h2>
+        <h2>Register as a Prestataire</h2>
         <div class="arrow">→</div>
     </div>
 

@@ -174,7 +174,7 @@
     <form th:action="@{/Login}" th:object="${prestataire}" method="post">
         <div class="input-field">
             <input type="text" name="email" required th:value="${email}">
-            <label>Email or Username</label>
+            <label>Email</label>
         </div>
         <div class="input-field">
             <input class="pswrd" type="password" name="password" required>
@@ -201,7 +201,7 @@
         </div>
     </div>
     <div class="signup">
-        Not a member? <a href="#">Signup now</a>
+        Not a member? <a href="inscriptionclient">Signup now</a>
     </div>
 </div>
 <script>

@@ -10,7 +10,6 @@ import com.example.eventmanagement.repository.ParticipantRepository;
 import com.example.eventmanagement.repository.PrestataireRepository;
 import com.example.eventmanagement.services.ParticipantService;
 import com.example.eventmanagement.services.PrestataireService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,13 +53,6 @@ public class HomeController {
         }
         participantService.saveParticipant(participant); // Sauvegarde dans la base de données
         return "redirect:/utilisateur/home"; // Redirection après l'enregistrement
-    }
-    @GetMapping("/deconnexion")
-    public String logout(HttpServletRequest request) {
-        // Invalider la session
-        request.getSession().invalidate();
-        // Rediriger vers la page d'accueil
-        return "redirect:utilisateur/home";
     }
 
     @GetMapping("utilisateur/home")
@@ -223,6 +215,4 @@ public class HomeController {
     public String logout() {
         return "redirect:/login"; // Par défaut, Spring Security gère cette redirection
     }
-
-
 }
