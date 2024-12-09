@@ -91,11 +91,13 @@
 <!-- Résultats de recherche -->
 <section>
     <h2>Espaces correspondants</h2>
-    <h2>Espaces correspondants</h2>
+
     <ul>
         <li th:each="space : ${spaces}">
             <div>
-                <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
+                <div th:each="image : ${space.images}">
+                    <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Photo de l'espace" />
+                </div>
                 <h3 th:text="${space.nomComplet}">Nom de l'Espace</h3>
                 <p th:text="'Type : ' + ${space.typeEspace}">Type d'Espace</p>
                 <p th:text="'Capacité : ' + ${space.capacite}">Capacité</p>

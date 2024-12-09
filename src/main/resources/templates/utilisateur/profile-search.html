@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil Participant</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    header nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #4CAF50;
+        padding: 1rem;
+        color: white;
+    }
+
+    header nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+    }
+
+    header nav ul li {
+        display: inline;
+    }
+
+    header nav ul li a {
+        color: white;
+        text-decoration: none;
+    }
+
+    form {
+        margin: 1rem 0;
+    }
+
+    form div {
+        margin-bottom: 0.5rem;
+    }
+
+    form input, form button {
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.7rem 1rem;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    img {
+        max-width: 100px;
+        height: auto;
+    }
+
+</style>
+
+<body>
+<!-- Barre de navigation -->
+<header>
+    <nav>
+        <div>
+            <h1>Yoyo InspireSpace</h1>
+        </div>
+        <!-- Formulaire de recherche -->
+        <section>
+            <h2>Rechercher un espace</h2>
+            <form action="/search-prestataires" method="GET">
+                <div>
+                    <input type="text" name="nom" placeholder="Rechercher par nom" value="${searchQuery}" />
+                </div>
+                <button type="submit">Rechercher</button>
+            </form>
+        </section>
+
+        <ul>
+            <li><a href="/utilisateur/home">Accueil</a></li>
+            <li><a href="/logout">Déconnexion</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Message de bienvenue -->
+<section>
+    <h2>Bienvenue, <span th:text="${participant.nom}">Nom du Participant</span></h2>
+</section>
+
+<!-- Formulaire de recherche complexe -->
+<section>
+    <h3>Rechercher un Espace</h3>
+    <form action="/utilisateur/search-results" method="post">
+        <div>
+            <label for="typeEspace">Type d'Espace :</label>
+            <input type="text" id="typeEspace" name="typeEspace" required>
+        </div>
+        <div>
+            <label for="capacite">Capacité :</label>
+            <input type="number" id="capacite" name="capacite" required>
+        </div>
+        <div>
+            <label for="prixDecoration">Prix pour la Décoration :</label>
+            <input type="number" step="0.01" id="prixDecoration" name="prixDecoration">
+        </div>
+        <div>
+            <label for="prixBuffet">Prix pour le Buffet :</label>
+            <input type="number" step="0.01" id="prixBuffet" name="prixBuffet">
+        </div>
+        <div>
+            <label for="prixPhotographie">Prix pour la Photographie :</label>
+            <input type="number" step="0.01" id="prixPhotographie" name="prixPhotographie">
+        </div>
+        <div>
+            <label for="prixBoissons">Prix pour les Boissons :</label>
+            <input type="number" step="0.01" id="prixBoissons" name="prixBoissons">
+        </div>
+        <div>
+            <label for="nombrePersonnes">Nombre de Personnes :</label>
+            <input type="number" id="nombrePersonnes" name="nombrePersonnes" required>
+        </div>
+        <button type="submit">Rechercher</button>
+    </form>
+</section>
+</body>
+</html>
