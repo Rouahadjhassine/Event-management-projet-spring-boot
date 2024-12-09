@@ -140,25 +140,30 @@ public class HomeController {
         return "utilisateur/profileprestataire";
     }
     @GetMapping("/profile")
-    public String showProfile(Model model) {
-        // Remplacez par l'authentification réelle
+    public String showProfileAndSearchForm(Model model) {
+        // Simulation : remplacer par l'authentification réelle
         Participant participant = participantRepository.findById(1L).orElse(null);
+
+        if (participant == null) {
+            return "redirect:/login"; // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
+        }
+
+        // Ajouter les attributs au modèle
         model.addAttribute("participant", participant);
-        return "utilisateur/profile";
+        model.addAttribute("espace", new EspaceEvenement()); // Pour le formulaire de recherche
+
+        return "utilisateur/profile-search"; // Correspond à profile-search.html
     }
 
-    // Formulaire de recherche
-    @GetMapping("/search-form")
-    public String showSearchForm(Model model) {
-        model.addAttribute("espace", new EspaceEvenement());
-        return "utilisateur/search-form";
-    }
-
-    // Résultats de recherche
+    // Traitement du formulaire de recherche
     @PostMapping("/search-results")
     public String searchSpaces(@ModelAttribute EspaceEvenement criteria, Model model) {
-        // Simulation : Remplacez avec l'authentification réelle
+        // Simulation : remplacer par l'authentification réelle
         Participant participant = participantRepository.findById(1L).orElse(null);
+
+        if (participant == null) {
+            return "redirect:/login";
+        }
 
         // Enregistrer la demande dans la base
         FormulaireDemande demande = new FormulaireDemande();
@@ -170,7 +175,7 @@ public class HomeController {
 
         formulaireDemandeRepository.save(demande);
 
-        // Recherche des espaces correspondants
+        // Rechercher les espaces correspondants
         List<EspaceEvenement> spaces = espaceEvenementRepository.findByCapaciteAndTypeEspaceAndDisponibilite(
                 criteria.getCapacite(),
                 criteria.getTypeEspace(),
@@ -178,37 +183,37 @@ public class HomeController {
         );
 
         model.addAttribute("spaces", spaces);
-        return "utilisateur/search-results";
+        return "utilisateur/search-results"; // Correspond à search-results.html
     }
+
+    // Recherche des prestataires par nom
+    @GetMapping("/search-prestataires")
+    public String searchPrestataires(@RequestParam("nom") String nom, Model model) {
+        List<EspaceEvenement> espaces = espaceEvenementRepository.findByNomCompletContainingIgnoreCase(nom);
+
+        model.addAttribute("spaces", espaces);
+        model.addAttribute("searchQuery", nom); // Ajouter la requête de recherche au modèle
+        return "utilisateur/search-results"; // Affiche les résultats correspondant au prestataire
+    }
+
 
     // Détails d'un espace
     @GetMapping("/space-details/{id}")
     public String showSpaceDetails(@PathVariable Long id, Model model) {
         EspaceEvenement espace = espaceEvenementRepository.findById(id).orElse(null);
+
+        if (espace == null) {
+            return "redirect:/utilisateur/profile"; // Rediriger en cas d'espace non trouvé
+        }
+
         model.addAttribute("space", espace);
         return "utilisateur/space-details";
     }
 
-    // Confirmation de la demande
-    @PostMapping("/confirm-request/{id}")
-    public String confirmRequest(@PathVariable Long id) {
-        // Simulation : Remplacez avec l'authentification réelle
-        Participant participant = participantRepository.findById(1L).orElse(null);
-
-        // Récupérer la demande en cours pour ce participant
-        FormulaireDemande demande = formulaireDemandeRepository.findByParticipantId(participant.getId())
-                .stream()
-                .filter(d -> d.getStatus().equals("En cours"))
-                .findFirst()
-                .orElse(null);
-
-        if (demande != null) {
-            demande.setStatus("Confirmée");
-            formulaireDemandeRepository.save(demande);
-        }
-
-        System.out.println("Demande confirmée pour l'espace ID: " + id);
-        return "redirect:/utilisateur/profile";
+    // Déconnexion (redirige vers une page définie dans Spring Security)
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login"; // Par défaut, Spring Security gère cette redirection
     }
 
 

@@ -3,24 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats de la Recherche</title>
+    <title>Résultats de Recherche</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-<h1>Résultats de Recherche</h1>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
 
-<div>
+    header nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #4CAF50;
+        padding: 1rem;
+        color: white;
+    }
+
+    header nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+    }
+
+    header nav ul li {
+        display: inline;
+    }
+
+    header nav ul li a {
+        color: white;
+        text-decoration: none;
+    }
+
+    form {
+        margin: 1rem 0;
+    }
+
+    form div {
+        margin-bottom: 0.5rem;
+    }
+
+    form input, form button {
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.7rem 1rem;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    img {
+        max-width: 100px;
+        height: auto;
+    }
+
+</style>
+<body>
+<!-- Barre de navigation -->
+<header>
+    <nav>
+        <div>
+            <h1>Yoyo InspireSpace</h1>
+        </div>
+        <ul>
+            <li><a href="/utilisateur/home">Accueil</a></li>
+            <li><a href="/logout">Déconnexion</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Résultats de recherche -->
+<section>
+    <h2>Espaces correspondants</h2>
+    <h2>Espaces correspondants</h2>
     <ul>
-        <!-- Afficher les espaces trouvés -->
         <li th:each="space : ${spaces}">
-            <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
-            <h3 th:text="${space.nom}">Nom de l'espace</h3>
-            <p th:text="${space.capacite}">Capacité</p>
-            <p th:text="${space.typeEspace}">Type d'espace</p>
-            <a th:href="@{/utilisateur/space-details/{id}(id=${space.id})}">Voir les détails</a>
+            <div>
+                <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
+                <h3 th:text="${space.nomComplet}">Nom de l'Espace</h3>
+                <p th:text="'Type : ' + ${space.typeEspace}">Type d'Espace</p>
+                <p th:text="'Capacité : ' + ${space.capacite}">Capacité</p>
+                <p th:text="'Prix Buffet : ' + ${space.prixBuffet} + ' TND'">Prix Buffet</p>
+                <a th:href="@{/utilisateur/space-details/{id}(id=${space.id})}">Voir les Détails</a>
+            </div>
         </li>
     </ul>
-</div>
 
-<a href="/utilisateur/profile">Retour au profil</a>
+</section>
 </body>
 </html>
