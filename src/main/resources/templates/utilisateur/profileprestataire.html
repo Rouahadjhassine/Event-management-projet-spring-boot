@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de Bord Prestataire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -406,7 +409,7 @@
             border-radius: 10px;
             color: #fff;
             font-size: 16px;
-            transform: .3s ease;
+
         }
 
         .submit:hover {
@@ -424,6 +427,61 @@
                 opacity: 0;
             }
         }
+        .box-container {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .box {
+            height: 130px;
+            width: 230px;
+            border-radius: 20px;
+            box-shadow: 3px 3px 10px rgba(0, 30, 87, 0.751);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .box:hover {
+            transform: scale(1.08);
+        }
+
+        .box:nth-child(1) {
+            background-color: var(--one-use-color);
+        }
+        .box:nth-child(2) {
+            background-color: var(--two-use-color);
+        }
+        .box:nth-child(3) {
+            background-color: var(--one-use-color);
+        }
+        .box:nth-child(4) {
+            background-color: var(--two-use-color);
+        }
+
+        .box img {
+            height: 50px;
+        }
+        .box .text {
+            color: white;
+        }
+        .topic {
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .topic-heading {
+            font-size: 20px;
+            letter-spacing: 3px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -432,9 +490,14 @@
         <div class="logo">YoYo InspireSpace</div>
         <nav class="menu">
             <ul>
-                <li><a onclick="showSection('ajouter-espace')">Ajouter un Espace</a></li>
-                <li><a onclick="showSection('gerer-compte')">Gérer le Compte</a></li>
-                <li><a onclick="showSection('gerer-photos')">Gérer les Photos</a></li>
+                <li><a onclick="showSection('dashbord')">Dashboard</a></li>
+                <li><a onclick="showSection('ajouter-espace')">Add space</a></li>
+                <li><a onclick="showSection('gerer-photos')">Events</a></li>
+                <li><a onclick="showSection('gerer-compte')">Manage Account</a></li>
+                <li><a href="/utilisateur/prestataire/gererphotos">Manage photos</a></li>
+                <li><a onclick="showSection('calendrier')">Calendrier</a></li>
+
+
                 <li><a href="/deconnexion">Déconnexion</a></li>
             </ul>
         </nav>
@@ -442,7 +505,50 @@
     <main class="content">
         <header>
             <h1>Bienvenue, <span th:text="${session.prestataireNom}"></span></h1>
+
         </header>
+        <section id="dashbord">
+        <div class="box-container">
+
+            <div class="box box1">
+                <div class="text">
+                    <h2 class="topic-heading">03</h2>
+                    <h2 class="topic">Total Clients</h2>
+                </div>
+
+                <img src=
+                             "https://cdn-icons-png.flaticon.com/512/6009/6009864.png"
+                     alt="Views">
+            </div>
+
+            <div class="box box2">
+                <div class="text">
+                    <h2 class="topic-heading">00</h2>
+                    <h2 class="topic">Total spaces</h2>
+                </div>
+
+                <img src=
+                             "https://cdn0.iconfinder.com/data/icons/coffee-25/436/coffee_60-1024.png"
+                     alt="likes">
+            </div>
+
+            <div class="box box3">
+                <div class="text">
+                    <h2 class="topic-heading">00</h2>
+                    <h2 class="topic">Total Events</h2>
+                </div>
+
+                <img src=
+                                 "https://static.vecteezy.com/system/resources/previews/016/314/814/non_2x/transparent-event-schedule-icon-free-png.png"
+                     alt="comments">
+            </div>
+
+
+        </div>
+            <div id="calendar" style="margin-top: 20px;"></div>
+        </section>
+
+
 
         <section id="ajouter-espace">
             <h2>Ajouter un Espace</h2>
@@ -607,19 +713,59 @@
 
 
 
+
+
+
     </main>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Vue mensuelle
+            headerToolbar: {
+                left: 'prev,next today', // Boutons navigation
+                center: 'title', // Titre du mois
+                right: 'dayGridMonth,timeGridWeek,timeGridDay' // Choix de la vue
+            },
+            events: [
+                // Vous pouvez ajouter des événements ici si nécessaire
+                {
+                    title: 'Événement Exemple',
+                    start: '2024-12-10',
+                    end: '2024-12-12'
+                },
+                {
+                    title: 'Autre Événement',
+                    start: '2024-12-15'
+                }
+            ]
+        });
+
+        calendar.render();
+    });
+
     function showSection(sectionId) {
         // Masquer toutes les sections
         const sections = document.querySelectorAll('section');
         sections.forEach(section => section.classList.remove('active'));
 
         // Afficher la section sélectionnée
-        document.getElementById(sectionId).classList.add('active');
+        const selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.classList.add('active');
+        }
     }
+
+    // Afficher le tableau de bord par défaut lors du chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+        showSection('dashbord');
+    });
+
 </script>
+
 
 </body>
 </html>

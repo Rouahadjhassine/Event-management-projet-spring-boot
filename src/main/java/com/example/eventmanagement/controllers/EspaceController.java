@@ -147,6 +147,28 @@ public class EspaceController {
         model.addAttribute("images", images); // Ajouter les images pour la vue
         return "utilisateur/gerer-photos"; // Page dédiée
     }
+    @PostMapping("/utilisateur/prestataire/deletephoto")
+    public String deletePhoto(@RequestParam("imageId") Long imageId, HttpSession session, Model model) {
+        Long prestataireId = (Long) session.getAttribute("prestataireId");
+        if (prestataireId == null) {
+            model.addAttribute("error", "Veuillez vous connecter pour effectuer cette action.");
+            return "utilisateur/loginclient";
+        }
+
+        // Supprimer l'image uniquement si elle appartient à un espace du prestataire
+        Optional<Image> imageOpt = imageRepository.findById(imageId);
+        if (imageOpt.isPresent()) {
+            Image image = imageOpt.get();
+            if (image.getEspaceEvenement().getPrestataire().getId().equals(prestataireId)) {
+                imageRepository.delete(image);
+            } else {
+                model.addAttribute("error", "Vous n'avez pas les droits pour supprimer cette image.");
+            }
+        }
+
+        return "redirect:/utilisateur/prestataire/gererphotos";
+    }
+
 
 
 
