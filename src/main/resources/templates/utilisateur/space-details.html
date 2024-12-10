@@ -9,12 +9,21 @@
 <h1>Détails de l'Espace</h1>
 
 <div>
-    <img th:src="@{'/images/' + ${space.id} + '.jpg'}" alt="Photo de l'espace" />
-    <h2 th:text="${space.nom}">Nom de l'espace</h2>
-    <p th:text="${space.capacite}">Capacité</p>
+    <h1 th:text="${space.nomComplet}">Nom de l'espace</h1>
+    <p th:text="${space.adresseComplete}">Adresse</p>
     <p th:text="${space.typeEspace}">Type d'espace</p>
-    <p th:text="${space.description}">Description de l'espace</p>
+    <p th:text="${space.capacite}">Capacité</p>
+
+    <!-- Parcourir les images -->
+    <div th:if="${space.images != null}" th:each="image : ${space.images}">
+        <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Photo de l'espace" />
+    </div>
+
+    <!-- Message si aucune image n'est disponible -->
+    <p th:if="${space.images == null || #lists.isEmpty(space.images)}">Aucune image disponible</p>
 </div>
+
+
 
 <form action="/utilisateur/confirm-request/{id}" method="post">
     <button type="submit">Confirmer la demande</button>

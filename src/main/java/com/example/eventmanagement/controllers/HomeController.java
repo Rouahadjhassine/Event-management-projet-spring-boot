@@ -198,7 +198,7 @@ public class HomeController {
 
 
     // Détails d'un espace
-    @GetMapping("/space-details/{id}")
+    @GetMapping("/utilisateur/space-details/{id}")
     public String showSpaceDetails(@PathVariable Long id, Model model) {
         EspaceEvenement espace = espaceEvenementRepository.findById(id).orElse(null);
 
@@ -207,7 +207,7 @@ public class HomeController {
         }
 
         model.addAttribute("space", espace);
-        return "utilisateur/space-details";
+        return "utilisateur/space-details"; // Nom du fichier HTML
     }
 
     // Déconnexion (redirige vers une page définie dans Spring Security)
