@@ -246,8 +246,13 @@ public class EspaceController {
         prestataireRepository.save(existingPrestataire);
 
         model.addAttribute("success", "Vos informations ont été mises à jour avec succès.");
-        return "redirect:/utilisateur/profileprestataire";
+
+        // Ajoutez l'objet prestataire à la vue avant de rediriger
+        model.addAttribute("prestataire", existingPrestataire);
+
+        return "utilisateur/profileprestataire";  // Vous pouvez également rediriger, mais assurez-vous que le modèle est passé à la page
     }
+
 
 
 }

@@ -215,4 +215,17 @@ public class HomeController {
     public String logout() {
         return "redirect:/login"; // Par défaut, Spring Security gère cette redirection
     }
+
+    @GetMapping("/filter-by-address")
+    public String filterByAddress(@RequestParam(value = "adresseCafe", required = false) String adresseCafe, Model model) {
+        List<EspaceEvenement> espaces;
+        if (adresseCafe != null && !adresseCafe.isEmpty()) {
+            espaces = espaceEvenementRepository.findByAdresseCompleteContainingIgnoreCase(adresseCafe);
+        } else {
+            espaces = espaceEvenementRepository.findAll();
+        }
+        model.addAttribute("spaces", espaces);
+        model.addAttribute("searchQuery", adresseCafe); // Garder la recherche dans le modèle
+        return "utilisateur/filter-results";
+    }
 }

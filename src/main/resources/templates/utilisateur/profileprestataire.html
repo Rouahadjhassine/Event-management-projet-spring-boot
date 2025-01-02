@@ -597,6 +597,10 @@
                             <label>Buffet (Prix par personne)</label>
                             <input type="number" th:field="*{prixBuffet}" placeholder="Prix buffet" required />
                         </div>
+                        <div class="input-field">
+                            <label>adresse (adressee)</label>
+                            <input type="text" th:field="*{adresseComplete}" placeholder="adresse" required />
+                        </div>
 
                         <!-- Champ pour nombre de personnes et coût total -->
                         <div class="input-field">
@@ -676,7 +680,7 @@
                         <span>Local Address</span>
                     </label>
                 </div>
-
+ 
                 <div class="flex">
                     <label>
                         <input required type="tel" class="input" name="phoneNumber" value="${prestataire.phoneNumber}">

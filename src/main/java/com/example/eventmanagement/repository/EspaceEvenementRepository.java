@@ -18,4 +18,5 @@ public interface EspaceEvenementRepository extends JpaRepository<EspaceEvenement
     List<EspaceEvenement> findByCapaciteAndTypeEspaceAndDisponibilite(Integer capacite, String typeEspace, String disponible);
 
     List<EspaceEvenement> findByNomCompletContainingIgnoreCase(String nom);
+    List<EspaceEvenement> findByAdresseCompleteContainingIgnoreCase(String adresseCafe);
 }
