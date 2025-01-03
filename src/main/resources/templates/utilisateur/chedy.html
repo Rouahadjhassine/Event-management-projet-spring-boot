@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Espaces Disponibles</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        :root {
+            --text-01: #45413E;
+            --light-01: #F9F9F9;
+            --light-02: #FFFFFF;
+            --brand-01: #DB7F67;
+            --brand-02: #F4CFC6;
+            --card-hover: 0px 4px 24px rgba(0, 0, 0, 0.15);
+            --card-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+            --hover-timing: all 0.2s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            background: var(--light-01);
+            margin: 0;
+            padding: 0;
+            color: var(--text-01);
+        }
+
+        header {
+            background: var(--brand-01);
+            color: var(--light-02);
+            padding: 16px 32px;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            margin: 0 16px;
+        }
+
+        header nav ul li a {
+            text-decoration: none;
+            color: var(--light-02);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: var(--brand-02);
+        }
+
+        section {
+            padding: 32px;
+        }
+
+        section h2 {
+            text-align: center;
+            color: var(--brand-01);
+            margin-bottom: 24px;
+            font-size: 28px;
+        }
+
+        .espace-card {
+            background: var(--light-02);
+            box-shadow: var(--card-shadow);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: var(--hover-timing);
+        }
+
+        .espace-card:hover {
+            box-shadow: var(--card-hover);
+            transform: scale(1.02);
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+
+        .espace-card h3 {
+            color: var(--text-01);
+            margin: 16px 0 8px;
+            font-size: 20px;
+        }
+
+        .espace-card p {
+            margin: 4px 0;
+            font-size: 16px;
+        }
+
+        .details-link, .request-event-btn {
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: var(--brand-01);
+            color: var(--light-02);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .details-link:hover, .request-event-btn:hover {
+            background: var(--brand-02);
+        }
+
+        .container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .event-type {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <h1>Liste des Espaces</h1>
+        <ul>
+            <li><a href="/utilisateur/home">Accueil</a></li>
+            <li><a href="/logout">Déconnexion</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <div class="container">
+        <p>Welcome to the event spaces page for:</p>
+        <!-- Logique pour afficher le contenu spécifique -->
+        <p class="event-type" th:if="${eventType == 'Birthday'}">🎉 Birthday Party!</p>
+        <p class="event-type" th:if="${eventType == 'Wedding'}">💒 Wedding Celebration!</p>
+        <p class="event-type" th:if="${eventType == 'Evening'}">🌙 Evening Event!</p>
+        <p class="event-type" th:if="${eventType == 'Conferences'}">🎤 Conferences Event!</p>
+        <p class="event-type" th:unless="${eventType}">🎭 Special Event!</p>
+    </div>
+    <h2>Espaces disponibles</h2>
+    <ul>
+        <!-- Boucle pour afficher chaque espace -->
+        <li th:each="espace : ${espaces}">
+            <div class="espace-card">
+                <!-- Images associées -->
+                <div th:each="image : ${espace.images}" class="image-container">
+                    <img th:src="'data:image/jpeg;base64,' + ${image.data}" alt="Image de l'espace" />
+                </div>
+                <!-- Informations de l'espace -->
+                <h3 th:text="${espace.nomComplet}">Nom de l'Espace</h3>
+                <p th:text="'Type : ' + ${espace.typeEspace}">Type</p>
+                <p th:text="'Capacité : ' + ${espace.capacite}">Capacité</p>
+                <p th:text="'Prix Buffet : ' + ${espace.prixBuffet} + ' TND'">Prix</p>
+                <a th:href="@{/utilisateur/space-details/{id}(id=${espace.id})}" class="details-link">Voir les détails</a>
+                <!-- Nouveau bouton "Request Event" -->
+                <a th:href="@{/utilisateur/request-event/{id}(id=${espace.id})}" class="request-event-btn">Demander un Événement</a>
+            </div>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

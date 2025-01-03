@@ -7,13 +7,11 @@ import com.example.eventmanagement.repository.EspaceEvenementRepository;
 import com.example.eventmanagement.repository.PrestataireRepository;
 import com.example.eventmanagement.repository.ImageRepository;
 
+import com.example.eventmanagement.services.EspaceEvenementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 
@@ -34,6 +32,8 @@ public class EspaceController {
 
     @Autowired
     private EspaceEvenementRepository espaceEvenementRepository;
+    @Autowired
+    private EspaceEvenementService espaceEvenementService;
 
     // Affichage du formulaire d'ajout d'un espace
     @GetMapping("/utilisateur/prestataire/registerespace")
@@ -253,6 +253,35 @@ public class EspaceController {
         return "utilisateur/profileprestataire";  // Vous pouvez également rediriger, mais assurez-vous que le modèle est passé à la page
     }
 
+
+    @GetMapping("/espaces")
+    public String afficherEspaces(@RequestParam(required = false) String type,Model model) {
+        // Récupérer tous les espaces
+        List<EspaceEvenement> espaces = espaceEvenementService.getAllEspaces();
+        model.addAttribute("espaces", espaces);
+        model.addAttribute("eventType", type != null ? type : "Unknown Event");
+
+        // Retourner la vue pour afficher les espaces
+        return "utilisateur/chedy"; // Assurez-vous que le fichier HTML s'appelle "espaces.html"
+    }
+    @GetMapping("/utilisateur/request-event/{id}")
+    public String showRequestEventForm(@PathVariable("id") Long espaceId, Model model) {
+        // Vous pouvez envoyer l'ID de l'espace à la vue pour l'utiliser si nécessaire
+        model.addAttribute("espaceId", espaceId);
+        return "utilisateur/request_event";  // Nom de la page HTML
+    }
+
+    @PostMapping("/utilisateur/request-event")
+    public String handleRequestEventForm(@RequestParam("eventName") String eventName,
+                                         @RequestParam("eventDate") String eventDate,
+                                         @RequestParam("eventType") String eventType,
+                                         @RequestParam(value = "eventDetails", required = false) String eventDetails) {
+        // Traitez les données du formulaire ici (par exemple, sauvegardez dans la base de données)
+        // Logique pour enregistrer la demande d'événement
+
+        // Rediriger vers une page de confirmation ou la page d'accueil après la soumission
+        return "redirect:/utilisateur/home";
+    }
 
 
 }

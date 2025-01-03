@@ -59,6 +59,14 @@ public class HomeController {
     public String home() {
         return "utilisateur/home"; // Page d'accueil après inscription
     }
+
+
+    @GetMapping("utilisateur/homepartcipant")
+    public String homeparticipant() {
+        return "utilisateur/home_participant"; // Page d'accueil après inscription
+    }
+
+
     @GetMapping("utilisateur/homeprestataire")
     public String homeprestataire() {
         return "utilisateur/homeprestataire"; // Page d'accueil après inscription

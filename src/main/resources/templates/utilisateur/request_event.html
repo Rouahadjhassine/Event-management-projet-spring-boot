@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demander un Événement</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <nav>
+        <h1>Demander un Événement</h1>
+        <ul>
+            <li><a href="/utilisateur/home">Accueil</a></li>
+            <li><a href="/logout">Déconnexion</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <div class="container">
+        <h2>Formulaire de Demande d'Événement</h2>
+        <form th:action="@{/utilisateur/request-event}" method="post">
+            <div class="form-group">
+                <label for="eventName">Nom de l'événement</label>
+                <input type="text" id="eventName" name="eventName" required placeholder="Entrez le nom de l'événement">
+            </div>
+            <div class="form-group">
+                <label for="eventDate">Date de l'événement</label>
+                <input type="date" id="eventDate" name="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label for="eventType">Type d'événement</label>
+                <select id="eventType" name="eventType" required>
+                    <option value="Birthday">Anniversaire</option>
+                    <option value="Wedding">Mariage</option>
+                    <option value="Conference">Conférence</option>
+                    <option value="Evening">Soirée</option>
+                    <option value="Other">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="eventDetails">Détails supplémentaires</label>
+                <textarea id="eventDetails" name="eventDetails" placeholder="Détails ou demandes particulières" rows="4"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Envoyer la demande</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

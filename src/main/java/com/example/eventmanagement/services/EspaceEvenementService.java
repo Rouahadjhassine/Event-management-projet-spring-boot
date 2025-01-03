@@ -60,4 +60,8 @@ public class EspaceEvenementService {
         // Assigner le coût total à l'objet
         espaceEvenement.setCoutTotal(coutTotal);
     }
+    public List<EspaceEvenement> getEspacesParPrestataire(Long prestataireId) {
+        return espaceEvenementRepository.findByPrestataireId(prestataireId);
+    }
+
 }
