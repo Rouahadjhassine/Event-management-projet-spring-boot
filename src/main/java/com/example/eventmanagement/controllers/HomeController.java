@@ -40,6 +40,8 @@ public class HomeController {
     @Autowired
     private PrestataireRepository prestataireRepository;
 
+
+
     @GetMapping("utilisateur/participant/register")
     public String participantRegister(Model model) {
         model.addAttribute("participant", new Participant());
@@ -61,9 +63,9 @@ public class HomeController {
     }
 
 
-    @GetMapping("utilisateur/homepartcipant")
+    @GetMapping("/utilisateur/homeparticipant")
     public String homeparticipant() {
-        return "utilisateur/home_participant"; // Page d'accueil après inscription
+        return "utilisateur/home_participant"; // Page d'accueil après connexion
     }
 
 
@@ -106,15 +108,15 @@ public class HomeController {
         if (participantOpt.isPresent()) {
             Participant participant = participantOpt.get();
             if (participant.getPassword().equals(password)) {
-                // Redirection vers la page 'home' pour un participant
-                return "redirect:/profile";
+                session.setAttribute("participantId", participant.getId());
+                session.setAttribute("participantNom", participant.getNom());
+                return "redirect:/utilisateur/homeparticipant";
             } else {
                 model.addAttribute("error", "Mot de passe incorrect !");
                 return "utilisateur/loginclient";
             }
         }
 
-        // Si l'email n'existe ni pour Prestataire ni pour Participant
         model.addAttribute("error", "Email ou mot de passe incorrect !");
         return "utilisateur/loginclient";
     }
@@ -236,4 +238,55 @@ public class HomeController {
         model.addAttribute("searchQuery", adresseCafe); // Garder la recherche dans le modèle
         return "utilisateur/filter-results";
     }
+
+
+
+    @PostMapping("/utilisateur/request-event")
+    public String handleRequestEvent(@RequestParam("espaceId") Long espaceId,
+                                     @RequestParam("prestataireId") Long prestataireId,
+                                     @RequestParam("eventName") String eventName,
+                                     @RequestParam("eventDate") LocalDate eventDate,
+                                     @RequestParam("eventType") String eventType,
+                                     @RequestParam("eventDetails") String eventDetails,
+                                     HttpSession session) {
+
+        Long participantId = (Long) session.getAttribute("participantId");
+        Participant participant = participantRepository.findById(participantId)
+                .orElseThrow(() -> new IllegalArgumentException("Participant non trouvé"));
+
+        EspaceEvenement espaceEvenement  = espaceEvenementRepository.findById(espaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Espace non trouvé"));
+
+
+        Prestataire prestataire = prestataireRepository.findById(prestataireId)
+                .orElseThrow(() -> new IllegalArgumentException("Prestataire non trouvé"));
+
+
+
+        FormulaireDemande demande = new FormulaireDemande();
+        demande.setParticipant(participant);
+        demande.setEspaceEvenement(espaceEvenement );
+        demande.setPrestataire(prestataire);
+        demande.setCapacite(100); // Exemple d'une capacité fixe
+        demande.setTypeEspace(eventType);
+        demande.setDateDemande(LocalDate.now());
+        demande.setStatus("En cours");
+
+        formulaireDemandeRepository.save(demande);
+
+        return "redirect:/utilisateur/home"; // Redirection après enregistrement
+    }
+
+    @GetMapping("/utilisateur/request-event/{id}")
+    public String showRequestEventForm(@PathVariable("id") Long espaceId, Model model) {
+        EspaceEvenement espace = espaceEvenementRepository.findById(espaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Espace non trouvé"));
+        Prestataire prestataire = espace.getPrestataire();
+
+        model.addAttribute("espaceId", espaceId);
+        model.addAttribute("prestataireId", prestataire.getId());
+        return "utilisateur/request_event";  // Nom de la page HTML
+    }
+
+
 }

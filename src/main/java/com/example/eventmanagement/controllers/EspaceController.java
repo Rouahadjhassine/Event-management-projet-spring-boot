@@ -264,24 +264,8 @@ public class EspaceController {
         // Retourner la vue pour afficher les espaces
         return "utilisateur/chedy"; // Assurez-vous que le fichier HTML s'appelle "espaces.html"
     }
-    @GetMapping("/utilisateur/request-event/{id}")
-    public String showRequestEventForm(@PathVariable("id") Long espaceId, Model model) {
-        // Vous pouvez envoyer l'ID de l'espace à la vue pour l'utiliser si nécessaire
-        model.addAttribute("espaceId", espaceId);
-        return "utilisateur/request_event";  // Nom de la page HTML
-    }
 
-    @PostMapping("/utilisateur/request-event")
-    public String handleRequestEventForm(@RequestParam("eventName") String eventName,
-                                         @RequestParam("eventDate") String eventDate,
-                                         @RequestParam("eventType") String eventType,
-                                         @RequestParam(value = "eventDetails", required = false) String eventDetails) {
-        // Traitez les données du formulaire ici (par exemple, sauvegardez dans la base de données)
-        // Logique pour enregistrer la demande d'événement
 
-        // Rediriger vers une page de confirmation ou la page d'accueil après la soumission
-        return "redirect:/utilisateur/home";
-    }
 
 
 }

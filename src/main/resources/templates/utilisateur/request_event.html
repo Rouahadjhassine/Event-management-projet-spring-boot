@@ -20,6 +20,8 @@
     <div class="container">
         <h2>Formulaire de Demande d'Événement</h2>
         <form th:action="@{/utilisateur/request-event}" method="post">
+            <input type="text" name="espaceId" th:value="${espaceId}">
+            <input type="text" name="prestataireId" th:value="${prestataireId}">
             <div class="form-group">
                 <label for="eventName">Nom de l'événement</label>
                 <input type="text" id="eventName" name="eventName" required placeholder="Entrez le nom de l'événement">
@@ -46,5 +48,6 @@
         </form>
     </div>
 </section>
+
 </body>
 </html>

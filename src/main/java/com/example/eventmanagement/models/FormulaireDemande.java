@@ -14,6 +14,13 @@ public class FormulaireDemande {
     @JoinColumn(name = "participant_id", nullable = false)
     private Participant participant;
 
+    @ManyToOne
+    @JoinColumn(name = "espace_id", nullable = false)
+    private EspaceEvenement espaceEvenement;
+
+    @ManyToOne
+    @JoinColumn(name = "prestataire_id", nullable = false)
+    private Prestataire prestataire;
     private Integer capacite; // Capacité demandée
     private String typeEspace; // Type d'espace demandé
     private LocalDate dateDemande; // Date de la demande
@@ -68,5 +75,11 @@ public class FormulaireDemande {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setPrestataire(Prestataire prestataire) {
+    }
+
+    public void setEspaceEvenement(EspaceEvenement espace) {
     }
 }
