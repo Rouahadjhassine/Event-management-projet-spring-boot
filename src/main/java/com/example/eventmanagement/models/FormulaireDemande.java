@@ -78,8 +78,11 @@ public class FormulaireDemande {
     }
 
     public void setPrestataire(Prestataire prestataire) {
+        this.prestataire = prestataire;
     }
 
-    public void setEspaceEvenement(EspaceEvenement espace) {
+    public void setEspaceEvenement(EspaceEvenement espaceEvenement) {
+        this.espaceEvenement = espaceEvenement;
     }
+
 }

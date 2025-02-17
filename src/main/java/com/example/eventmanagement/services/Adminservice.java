@@ -39,12 +39,6 @@ public class Adminservice {
         });
     }
 
-    public void deleteAdmin(Long id) {
-        adminRepository.deleteById(id);  // Supprime un admin par son ID
-    }
-    public Optional<Admin> findByEmail(String email) {
-        return Optional.ofNullable(adminRepository.findByEmail(email));
-    }
     @Transactional
     public Participant updateParticipant(Long id, Participant participantDetails) {
         return participantRepository.findById(id).map(existingParticipant -> {
